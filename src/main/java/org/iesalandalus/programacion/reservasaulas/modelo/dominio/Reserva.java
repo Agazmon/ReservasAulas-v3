@@ -1,10 +1,11 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dominio;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.*;
 
-public class Reserva {
+public class Reserva implements Serializable{
 	private Profesor profesor;
 	private Aula aula;
 	private Permanencia permanencia;
