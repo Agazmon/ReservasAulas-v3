@@ -1,6 +1,6 @@
 # Tarea Reservas de Aulas
 ## Profesor: José Ramón Jiménez Reyes
-## Alumno:
+## Alumno: Alejandro Jesús Gázquez Monedero
 
 Desde el IES Al-Ándalus nos acaban de comentar que por favor añadamos persistencia a los datos introducidos, ya que tal y como está ahora la aplicación no es funcional. Por tanto, en esta tarea añadiremos persistencia a los datos utilizando para ello ficheros de objetos.
 
