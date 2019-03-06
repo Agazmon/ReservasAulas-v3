@@ -1,5 +1,13 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dao;
 
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +17,7 @@ import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Aula;
 
 public class Aulas {
 	private List<Aula> coleccionAulas;
+	private static final String NOMBRE_FICHERO_AULAS = "ficheros/aulas.dat";
 
 	public Aulas() {
 		coleccionAulas = new ArrayList<>();
@@ -78,5 +87,37 @@ public class Aulas {
 		}
 		return listaString;
 	}
-
+	public void leer() {
+		File ficheroAulas = new File(NOMBRE_FICHERO_AULAS);
+		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(ficheroAulas))) {
+			Aula aula = null;
+			do {
+				aula = (Aula) entrada.readObject();
+				insertar(aula);
+			} while (aula != null);
+		} catch (ClassNotFoundException e) {
+			System.out.println("No se ha podido encontrar el aula para leer.");
+		} catch (FileNotFoundException e) {
+			System.out.println("No se puede abrir el fichero de aulas.");
+		} catch (EOFException e) {
+			System.out.println("El fichero de aulas ha sido leido.");
+		} catch (IOException e) {
+			System.out.println("Error inesperado de Entrada/Salida.");
+		} catch (OperationNotSupportedException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	public void escribir() {
+		File ficheroAulas = new File(NOMBRE_FICHERO_AULAS);
+		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ficheroAulas))){
+			for (Aula aula : coleccionAulas) {
+				salida.writeObject(aula);
+			}
+			System.out.println("Fichero de aulas ha sido escrito");
+		} catch (FileNotFoundException e) {
+			System.out.println("No se puede crear el fichero de aulas.");
+		} catch (IOException e) {
+			System.out.println("Error inesperado de Entrada/Salida");
+		}
+	}
 }
