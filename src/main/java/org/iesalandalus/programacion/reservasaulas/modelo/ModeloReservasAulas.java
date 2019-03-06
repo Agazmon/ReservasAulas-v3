@@ -50,12 +50,14 @@ public class ModeloReservasAulas implements IModeloReservasAulas {
 	public void borrarAula(Aula aulaBorrar) throws OperationNotSupportedException {
 		aulas.borrar(aulaBorrar);
 	}
+
 	@Override
 	public void leerAulas() {
 		aulas.leer();
 	}
+
 	@Override
-	public void escribirAulas(){
+	public void escribirAulas() {
 		aulas.escribir();
 	}
 
