@@ -87,6 +87,7 @@ public class Aulas {
 		}
 		return listaString;
 	}
+
 	public void leer() {
 		File ficheroAulas = new File(NOMBRE_FICHERO_AULAS);
 		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(ficheroAulas))) {
@@ -96,7 +97,7 @@ public class Aulas {
 				insertar(aula);
 			} while (aula != null);
 		} catch (ClassNotFoundException e) {
-			System.out.println("No se ha podido encontrar el aula para leer.");
+			System.out.println("No se ha podido encontrar la aula para leer.");
 		} catch (FileNotFoundException e) {
 			System.out.println("No se puede abrir el fichero de aulas.");
 		} catch (EOFException e) {
@@ -107,9 +108,10 @@ public class Aulas {
 			System.out.println(e.getMessage());
 		}
 	}
+
 	public void escribir() {
 		File ficheroAulas = new File(NOMBRE_FICHERO_AULAS);
-		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ficheroAulas))){
+		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ficheroAulas))) {
 			for (Aula aula : coleccionAulas) {
 				salida.writeObject(aula);
 			}
