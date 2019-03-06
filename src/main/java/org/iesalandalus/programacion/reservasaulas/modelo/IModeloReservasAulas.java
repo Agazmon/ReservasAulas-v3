@@ -22,6 +22,10 @@ public interface IModeloReservasAulas {
 	void insertarAula(Aula aulaInsertar) throws OperationNotSupportedException;
 
 	void borrarAula(Aula aulaBorrar) throws OperationNotSupportedException;
+	
+	void leerAulas();
+	
+	void escribirAulas();
 
 	List<Profesor> getProfesores();
 
@@ -34,6 +38,10 @@ public interface IModeloReservasAulas {
 	void insertarProfesor(Profesor profesorInsertar) throws OperationNotSupportedException;
 
 	void borrarProfesor(Profesor profesorBorrar) throws OperationNotSupportedException;
+	
+	void leerProfesor();
+	
+	void escribirProfesor();
 
 	List<Reserva> getReservas();
 
@@ -54,5 +62,9 @@ public interface IModeloReservasAulas {
 	List<Reserva> getReservasPermanencia(Permanencia permanenciaReservas);
 
 	boolean consultarDisponibilidad(Aula aula, Permanencia permanencia);
+
+	void leerReservas();
+
+	void escribirReservas();
 
 }
