@@ -19,7 +19,6 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 
 	public VistaReservasAulas() {
 		Opcion.setVista(this);
-		new ControladorReservasAulas(this, new ModeloReservasAulas());
 	}
 
 	@Override

@@ -24,7 +24,7 @@ import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Pe
 public class Reservas {
 
 	private List<Reserva> coleccionReservas;
-	private float MAX_PUNTOS_PROFESOR_MES = 200.00f;
+	private static final float MAX_PUNTOS_PROFESOR_MES = 200.00f;
 	private static final String NOMBRE_FICHERO_RESERVAS = "ficheros/reservas.dat";
 
 	public Reservas() {
@@ -105,7 +105,8 @@ public class Reservas {
 	}
 
 	private boolean esMesSiguienteOPosterior(Reserva reserva) {
-		if (reserva.getPermanencia().getDia().getMonthValue() == (LocalDate.now().getMonthValue())) {
+		if (reserva.getPermanencia().getDia().getMonthValue() == (LocalDate.now().getMonthValue())
+				| reserva.getPermanencia().getDia().getYear() != LocalDate.now().getYear()) {
 			return true;
 		} else {
 			return false;

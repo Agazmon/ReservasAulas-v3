@@ -3,7 +3,7 @@ package org.iesalandalus.programacion.reservasaulas.modelo.dominio;
 import java.io.Serializable;
 
 public class Aula implements Serializable {
-	private static final float PUNTOS_POR_PUESTO = (float) 0.5;
+	private static final float PUNTOS_POR_PUESTO = (float) 0.5f;
 	private int MIN_PUESTOS = 10;
 	private int MAX_PUESTOS = 100;
 	private String nombre;
@@ -37,7 +37,7 @@ public class Aula implements Serializable {
 	}
 
 	private void setPuestos(int puestos) {
-		if (puestos < MIN_PUESTOS | puestos > MAX_PUESTOS) {
+		if (puestos < MIN_PUESTOS || puestos > MAX_PUESTOS) {
 			throw new IllegalArgumentException("El número de puestos no es correcto.");
 		} else {
 			this.puestos = puestos;

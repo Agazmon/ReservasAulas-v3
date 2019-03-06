@@ -52,7 +52,7 @@ public class PermanenciaPorHora extends Permanencia implements Serializable {
 		if (hora == null) {
 			throw new IllegalArgumentException("La hora de una permanencia no puede ser nula.");
 		}
-		if (hora.getHour() > HORA_FIN.getHour() | hora.getHour() < HORA_INICIO.getHour()) {
+		if (hora.getHour() > HORA_FIN.getHour() || hora.getHour() < HORA_INICIO.getHour()) {
 			throw new IllegalArgumentException(
 					"La hora de una permanencia debe estar comprendida entre las 8 y las 22.");
 		}
