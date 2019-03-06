@@ -25,7 +25,7 @@ public class Reservas {
 
 	private List<Reserva> coleccionReservas;
 	private float MAX_PUNTOS_PROFESOR_MES = 200.00f;
-	private static final String NOMBRE_FICHERO_RESERVAS = "fichero/reservas.dat";
+	private static final String NOMBRE_FICHERO_RESERVAS = "ficheros/reservas.dat";
 
 	public Reservas() {
 		coleccionReservas = new ArrayList<>();
