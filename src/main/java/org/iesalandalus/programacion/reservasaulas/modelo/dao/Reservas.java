@@ -1,5 +1,13 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dao;
 
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +25,7 @@ public class Reservas {
 
 	private List<Reserva> coleccionReservas;
 	private float MAX_PUNTOS_PROFESOR_MES = 200.00f;
+	private static final String NOMBRE_FICHERO_RESERVAS = "fichero/reservas.dat";
 
 	public Reservas() {
 		coleccionReservas = new ArrayList<>();
@@ -54,42 +63,49 @@ public class Reservas {
 			throw new IllegalArgumentException("No se puede realizar una reserva nula.");
 		}
 		if (esMesSiguienteOPosterior(reserva)) {
-			throw new OperationNotSupportedException("Sólo se pueden hacer reservas para el mes que viene o posteriores.");
+			throw new OperationNotSupportedException(
+					"Sólo se pueden hacer reservas para el mes que viene o posteriores.");
 		}
-		if(getPuntosGastadosReserva(reserva)>MAX_PUNTOS_PROFESOR_MES) {
-			throw new OperationNotSupportedException("Esta reserva excede los puntos máximos por mes para dicho profesor.");
+		if (getPuntosGastadosReserva(reserva) > MAX_PUNTOS_PROFESOR_MES) {
+			throw new OperationNotSupportedException(
+					"Esta reserva excede los puntos máximos por mes para dicho profesor.");
 		}
 		if (coleccionReservas.contains(reserva)) {
 			throw new OperationNotSupportedException("La reserva ya existe.");
 		} else {
-			if (getReservaDia(reserva.getPermanencia().getDia())==null) {
-				if(consultarDisponibilidad(reserva.getAula(), reserva.getPermanencia())){
+			if (getReservaDia(reserva.getPermanencia().getDia()) == null) {
+				if (consultarDisponibilidad(reserva.getAula(), reserva.getPermanencia())) {
 					coleccionReservas.add(new Reserva(reserva));
 				}
-			} else{
-				if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorTramo & reserva.getPermanencia() instanceof PermanenciaPorTramo) {
-					if(consultarDisponibilidad(reserva.getAula(), reserva.getPermanencia())){
+			} else {
+				if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorTramo
+						& reserva.getPermanencia() instanceof PermanenciaPorTramo) {
+					if (consultarDisponibilidad(reserva.getAula(), reserva.getPermanencia())) {
 						coleccionReservas.add(new Reserva(reserva));
 					}
 				} else {
-					if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorHora & reserva.getPermanencia() instanceof PermanenciaPorHora) {
-						if(consultarDisponibilidad(reserva.getAula(), reserva.getPermanencia())){
+					if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorHora
+							& reserva.getPermanencia() instanceof PermanenciaPorHora) {
+						if (consultarDisponibilidad(reserva.getAula(), reserva.getPermanencia())) {
 							coleccionReservas.add(new Reserva(reserva));
 						}
 					} else {
-						if (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorHora) {
-							throw new OperationNotSupportedException("Ya se ha realizado una reserva por hora para este día y aula.");
+						if (getReservaDia(reserva.getPermanencia().getDia())
+								.getPermanencia() instanceof PermanenciaPorHora) {
+							throw new OperationNotSupportedException(
+									"Ya se ha realizado una reserva por hora para este día y aula.");
 						} else {
-							throw new OperationNotSupportedException("Ya se ha realizado una reserva por tramo para este día y aula.");
+							throw new OperationNotSupportedException(
+									"Ya se ha realizado una reserva por tramo para este día y aula.");
 						}
 					}
 				}
 			}
+		}
 	}
-}	
 
 	private boolean esMesSiguienteOPosterior(Reserva reserva) {
-		if (reserva.getPermanencia().getDia().getMonthValue()==(LocalDate.now().getMonthValue())) {
+		if (reserva.getPermanencia().getDia().getMonthValue() == (LocalDate.now().getMonthValue())) {
 			return true;
 		} else {
 			return false;
@@ -98,13 +114,14 @@ public class Reservas {
 
 	private float getPuntosGastadosReserva(Reserva reserva) {
 		float totalPuntos = 0;
-		if (getReservasProfesorMes(reserva.getProfesor(),reserva.getPermanencia().getDia())==null){
+		if (getReservasProfesorMes(reserva.getProfesor(), reserva.getPermanencia().getDia()) == null) {
 			return reserva.getPuntos();
 		} else {
-		for (Reserva puntosReservas : getReservasProfesorMes(reserva.getProfesor(),reserva.getPermanencia().getDia())){
-			totalPuntos+=puntosReservas.getPuntos();
-		}
-		return totalPuntos+reserva.getPuntos();
+			for (Reserva puntosReservas : getReservasProfesorMes(reserva.getProfesor(),
+					reserva.getPermanencia().getDia())) {
+				totalPuntos += puntosReservas.getPuntos();
+			}
+			return totalPuntos + reserva.getPuntos();
 		}
 	}
 
@@ -112,7 +129,7 @@ public class Reservas {
 		List<Reserva> reservasProfesor = new ArrayList<>();
 		for (Reserva reserva : coleccionReservas) {
 			if (reserva.getProfesor().equals(profesor)
-					& reserva.getPermanencia().getDia().getMonthValue()==fecha.getMonthValue()) {
+					& reserva.getPermanencia().getDia().getMonthValue() == fecha.getMonthValue()) {
 				reservasProfesor.add(new Reserva(reserva));
 			}
 		}
@@ -192,25 +209,64 @@ public class Reservas {
 		if (permanencia == null) {
 			throw new IllegalArgumentException("No se puede consultar la disponibilidad de una permanencia nula.");
 		}
-		if (getReservaDia(permanencia.getDia())==null) {
+		if (getReservaDia(permanencia.getDia()) == null) {
 			return true;
 		} else {
 			Profesor profesorConsulta = new Profesor("Profesor", "correo@correo.com");
 			Reserva reservaConsulta = new Reserva(profesorConsulta, aula, permanencia);
 			if (coleccionReservas.contains(reservaConsulta)) {
-			for (Reserva reserva : coleccionReservas) {
-				if((getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorTramo & reserva.getPermanencia() instanceof PermanenciaPorTramo)|| (getReservaDia(reserva.getPermanencia().getDia()).getPermanencia() instanceof PermanenciaPorHora & reserva.getPermanencia() instanceof PermanenciaPorHora)) {
-					if (reserva.getPermanencia().equals(reservaConsulta.getPermanencia())) {
-						return false;
+				for (Reserva reserva : coleccionReservas) {
+					if ((getReservaDia(reserva.getPermanencia().getDia())
+							.getPermanencia() instanceof PermanenciaPorTramo
+							& reserva.getPermanencia() instanceof PermanenciaPorTramo)
+							|| (getReservaDia(reserva.getPermanencia().getDia())
+									.getPermanencia() instanceof PermanenciaPorHora
+									& reserva.getPermanencia() instanceof PermanenciaPorHora)) {
+						if (reserva.getPermanencia().equals(reservaConsulta.getPermanencia())) {
+							return false;
+						}
 					}
+
 				}
-				
-			}
-			return true;
-		}
-			else {
+				return true;
+			} else {
 				return true;
 			}
-		}	
+		}
+	}
+
+	public void leer() {
+		File ficheroReservas = new File(NOMBRE_FICHERO_RESERVAS);
+		try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(ficheroReservas))) {
+			Reserva reserva = null;
+			do {
+				reserva = (Reserva) entrada.readObject();
+				insertar(reserva);
+			} while (reserva != null);
+		} catch (ClassNotFoundException e) {
+			System.out.println("No se ha podido encontrar la clase para leer.");
+		} catch (FileNotFoundException e) {
+			System.out.println("No se puede abrir el fichero de reservas.");
+		} catch (EOFException e) {
+			System.out.println("El fichero de reservas ha sido leido.");
+		} catch (IOException e) {
+			System.out.println("Error inesperado de Entrada/Salida.");
+		} catch (OperationNotSupportedException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public void escribir() {
+		File ficheroReservas = new File(NOMBRE_FICHERO_RESERVAS);
+		try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ficheroReservas))) {
+			for (Reserva reserva : coleccionReservas) {
+				salida.writeObject(reserva);
+			}
+			System.out.println("Fichero de reservas ha sido escrito");
+		} catch (FileNotFoundException e) {
+			System.out.println("No se puede crear el fichero de reservas.");
+		} catch (IOException e) {
+			System.out.println("Error inesperado de Entrada/Salida");
+		}
 	}
 }
