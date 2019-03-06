@@ -40,7 +40,7 @@ public class VistaReservasAulas implements IVistaReservasAulas {
 
 	@Override
 	public void salir() {
-		System.out.print("Has salido del programa Reservas Aulas.");
+		Controlador.salir();
 	}
 
 	@Override

@@ -21,12 +21,18 @@ public class ControladorReservasAulas implements IControladorReservasAulas {
 
 	@Override
 	public void comenzar() {
+		modelo.leerAulas();
+		modelo.leerProfesor();
+		modelo.leerReservas();
 		vista.comenzar();
 	}
 
 	@Override
 	public void salir() {
-		vista.salir();
+		modelo.escribirAulas();
+		modelo.escribirProfesor();
+		modelo.escribirReservas();
+		System.out.print("Has salido del programa Reservas Aulas.");
 	}
 
 	@Override
