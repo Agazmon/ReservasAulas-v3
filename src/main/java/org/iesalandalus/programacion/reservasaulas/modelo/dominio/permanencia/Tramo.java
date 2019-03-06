@@ -1,6 +1,8 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia;
 
-public enum Tramo {
+import java.io.Serializable;
+
+public enum Tramo implements Serializable{
 	MANANA("Mañana"), TARDE("Tarde");
 	private String cadenaAMostrar;
 

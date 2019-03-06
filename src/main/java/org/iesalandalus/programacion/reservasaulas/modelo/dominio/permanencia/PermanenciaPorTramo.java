@@ -1,10 +1,11 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
-public class PermanenciaPorTramo extends Permanencia {
+public class PermanenciaPorTramo extends Permanencia implements Serializable{
 	private Tramo tramo;
 	private static final int PUNTOS = 10;
 
